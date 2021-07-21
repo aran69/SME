@@ -42,33 +42,38 @@ public class SME{
 
 
 	public float eval(String a, String b, int dp, boolean[] meths){
-		float aggregate=0f;
-		int methcount=0;
-		for(int i=0; i<4; i++){
-			if(meths[i]){
-				methcount++;
-				switch(i){
-					case 0: //cha
-						aggregate+=charmatch(a,b);
-						break;
-					case 1: //len
-						aggregate+=lenmatch(a.length(),b.length());
-						break;
-					case 2: //pat
-						aggregate+=patmatch();
-						break;
-					case 3: //trad
-						aggregate+=tradmatch(a,b);
-						break;
+		if(a.equals(b)){
+			return 1f;
+		}
+		else{
+			float aggregate=0f;
+			int methcount=0;
+			for(int i=0; i<4; i++){
+				if(meths[i]){
+					methcount++;
+					switch(i){
+						case 0: //cha
+							aggregate+=charmatch(a,b);
+							break;
+						case 1: //len
+							aggregate+=lenmatch(a.length(),b.length());
+							break;
+						case 2: //pat
+							aggregate+=patmatch();
+							break;
+						case 3: //trad
+							aggregate+=tradmatch(a,b);
+							break;
+					}
 				}
 			}
+			if(methcount!=0){
+				aggregate/=methcount;
+			}
+			BigDecimal bd = new BigDecimal(aggregate).setScale(dp, RoundingMode.FLOOR);
+			aggregate = bd.floatValue();
+			return aggregate;
 		}
-		if(methcount!=0){
-			aggregate/=methcount;
-		}
-		BigDecimal bd = new BigDecimal(aggregate).setScale(dp, RoundingMode.FLOOR);
-		aggregate = bd.floatValue();
-		return aggregate;
 	}
 
 	public static float lenmatch(int a, int b){
